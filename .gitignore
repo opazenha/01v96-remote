@@ -1,0 +1,7 @@
+.project
+.settings
+.~
+.buildpath
+.idea
+config/*.js
+node_modules

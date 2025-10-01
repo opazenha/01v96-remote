@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+	<title>01v96 Remote</title>
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" sizes="152x152"
+          href="img/touch/152.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120"
+          href="img/touch/120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76"
+          href="img/touch/76.png" />
+    <link rel="apple-touch-icon-precomposed"
+          href="img/touch/57.png" />
+
+    <meta name="msapplication-TileImage"
+          content="img/touch/256.png" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+
+	<script src="lib/jquery/jquery-2.1.0.min.js"></script>
+	<script src="lib/fastclick/fastclick.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+
+<div id="wrapper">
+
+	<div id="top">
+		
+		<div id="headline">
+			01v96 Remote
+		</div>
+		
+		<ul id="navi" class="hidden">
+			<li data-tab="configuration" title="Configuration"><i class="icon-cog"></i></li>
+		</ul>
+		
+	</div>
+
+	<div id="content">
+		
+		<div class="tabcontent tabcontent-dynamic" data-tab="configuration" id="configuration">
+
+            <div id="configuration_loading" class="center">
+                <p>Loading configuration...</p>
+                <div class="loading-animation"></div>
+            </div>
+
+            <div id="configuration_content">
+                <div class="grid-3">
+                    <div>
+                        <h2>Channel names</h2>
+
+                        <div id="configuration_channels"></div>
+                    </div>
+                    <div>
+                        <h2>Master names</h2>
+
+                        <div id="configuration_master"></div>
+                    </div>
+                    <div>
+                        <h2>Pairs / Groups</h2>
+
+                        <textarea id="configuration_groups"></textarea>
+
+                        <p class="small">
+                            One line per group
+                            <br />
+                            channel numbers separated with commas
+                        </p>
+                    </div>
+                </div>
+
+                <div class="center">
+                    <button id="configuration_save">Save configuration</button>
+                </div>
+             </div>
+		</div>
+		
+		<div id="loading-dialog" class="dialog">
+			<div class="dialog-content dialog-center">
+				<div class="dialog-spacer"></div>
+				<p id="loading-dialog-text">Initializing 01v96 Remote...</p>
+				<div class="loading-animation"></div>
+			</div>
+		</div>
+		
+		<div id="error-dialog" class="dialog">
+			<div class="dialog-content dialog-center">
+				<p class="dialog-headline">
+					<i class="icon-warning-sign"></i>
+					ERROR
+					
+					<span class="dialog-subheadline">
+						(This isn't even remotely funny!)
+					</span>
+				</p>
+				<p id="error-dialog-text">Error message</p>
+				<p id="error-dialog-reload" onclick="window.location.reload()" title="reload page">
+					<i class="icon-refresh"></i>
+				</p>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+</body>
+</html>
