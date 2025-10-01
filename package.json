@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "author": "Michael Strobel",
   "license": "MIT",
-  "main": "server.js",
+  "main": "electron-main.js",
   "description": "WebSocket-MIDI bridge for Yamaha 01v96 Edit",
   "homepage": "https://github.com/kryops/01v96-remote",
   "bugs": "https://github.com/kryops/01v96-remote/issues",
@@ -12,12 +12,48 @@
     "url": "https://github.com/kryops/01v96-remote.git"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "electron .",
+    "start-server": "node server.js",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.kryops.01v96-remote",
+    "productName": "01v96 Remote",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron-main.js",
+      "server.js",
+      "server/**/*",
+      "client/**/*",
+      "config/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "client/img/favicon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.music"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Audio"
+    }
   },
   "dependencies": {
     "midi": "^1.0.0",
     "node-static": "^0.7.11",
     "serialport": "^9.0.3",
     "ws": "^7.4.6"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
   }
 }

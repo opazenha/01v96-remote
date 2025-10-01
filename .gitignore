@@ -5,3 +5,8 @@
 .idea
 config/*.js
 node_modules
+
+# Electron build artifacts
+dist
+out
+*.log

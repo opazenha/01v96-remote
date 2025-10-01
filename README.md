@@ -13,10 +13,14 @@ by Michael Strobel
 > - Light mode for outside events during the day
 > - Support for mixers other than the 01v96
 
+> ## ELECTRON VERSION AVAILABLE
+>
+> This application is now available as an **Electron desktop application**!
+> See [ELECTRON.md](ELECTRON.md) for installation and usage instructions.
 
 This application is a MIDI bridge to the Yamaha 01v96 mixing console to remote-control it over a network-based connection via WebSocket.
 
-It is based on a node.js server and includes a web client that can be used on both mouse- and touch-based devices.
+It is based on a node.js server and includes a web client that can be used on both mouse- and touch-based devices. It can also run as a standalone Electron desktop application.
 
 So far it has implemented
 
