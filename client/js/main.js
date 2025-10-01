@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 01V96 Remote
  * @author Michael Strobel, michael@kryops.de
  */
@@ -185,6 +185,98 @@ var remoteApp = {
                     ["sum", 0, "S"]
                 ]
             },
+
+            aux5: {
+                label: "AUX 5",
+                faders: [
+                    ["auxsend", 1, "1", 5],
+                    ["auxsend", 2, "2", 5],
+                    ["auxsend", 3, "3", 5],
+                    ["auxsend", 4, "4", 5],
+                    ["auxsend", 5, "5", 5],
+                    ["auxsend", 6, "6", 5],
+                    ["auxsend", 7, "7", 5],
+                    ["auxsend", 8, "8", 5],
+                    ["auxsend", 9, "9", 5],
+                    ["auxsend", 10, "10", 5],
+                    ["auxsend", 11, "11", 5],
+                    ["auxsend", 12, "12", 5],
+                    ["auxsend", 13, "13", 5],
+                    ["auxsend", 14, "14", 5],
+                    ["auxsend", 15, "15", 5],
+                    ["auxsend", 16, "16", 5],
+                    ["sum", 0, "S"]
+                ]
+            },
+
+            aux6: {
+                label: "AUX 6",
+                faders: [
+                    ["auxsend", 1, "1", 6],
+                    ["auxsend", 2, "2", 6],
+                    ["auxsend", 3, "3", 6],
+                    ["auxsend", 4, "4", 6],
+                    ["auxsend", 5, "5", 6],
+                    ["auxsend", 6, "6", 6],
+                    ["auxsend", 7, "7", 6],
+                    ["auxsend", 8, "8", 6],
+                    ["auxsend", 9, "9", 6],
+                    ["auxsend", 10, "10", 6],
+                    ["auxsend", 11, "11", 6],
+                    ["auxsend", 12, "12", 6],
+                    ["auxsend", 13, "13", 6],
+                    ["auxsend", 14, "14", 6],
+                    ["auxsend", 15, "15", 6],
+                    ["auxsend", 16, "16", 6],
+                    ["sum", 0, "S"]
+                ]
+            },
+
+            aux7: {
+                label: "AUX 7",
+                faders: [
+                    ["auxsend", 1, "1", 7],
+                    ["auxsend", 2, "2", 7],
+                    ["auxsend", 3, "3", 7],
+                    ["auxsend", 4, "4", 7],
+                    ["auxsend", 5, "5", 7],
+                    ["auxsend", 6, "6", 7],
+                    ["auxsend", 7, "7", 7],
+                    ["auxsend", 8, "8", 7],
+                    ["auxsend", 9, "9", 7],
+                    ["auxsend", 10, "10", 7],
+                    ["auxsend", 11, "11", 7],
+                    ["auxsend", 12, "12", 7],
+                    ["auxsend", 13, "13", 7],
+                    ["auxsend", 14, "14", 7],
+                    ["auxsend", 15, "15", 7],
+                    ["auxsend", 16, "16", 7],
+                    ["sum", 0, "S"]
+                ]
+            },
+
+            aux8: {
+                label: "AUX 8",
+                faders: [
+                    ["auxsend", 1, "1", 8],
+                    ["auxsend", 2, "2", 8],
+                    ["auxsend", 3, "3", 8],
+                    ["auxsend", 4, "4", 8],
+                    ["auxsend", 5, "5", 8],
+                    ["auxsend", 6, "6", 8],
+                    ["auxsend", 7, "7", 8],
+                    ["auxsend", 8, "8", 8],
+                    ["auxsend", 9, "9", 8],
+                    ["auxsend", 10, "10", 8],
+                    ["auxsend", 11, "11", 8],
+                    ["auxsend", 12, "12", 8],
+                    ["auxsend", 13, "13", 8],
+                    ["auxsend", 14, "14", 8],
+                    ["auxsend", 15, "15", 8],
+                    ["auxsend", 16, "16", 8],
+                    ["sum", 0, "S"]
+                ]
+            },
 			
 			master: {
 				label: "MASTER",
@@ -269,6 +361,9 @@ var remoteApp = {
 	init: function() {
 		var app = this;
 		
+		// Parse URL parameters
+		app.parseUrlParameters();
+		
 		app.openSocketConnection();
 		
 		// generate content and bind event handlers when page is loaded
@@ -279,6 +374,25 @@ var remoteApp = {
 			
 			app.start();
 		});
+	},
+	
+	/**
+	 * Parse URL parameters to determine which aux channel to show
+	 */
+	parseUrlParameters: function() {
+		var urlParams = new URLSearchParams(window.location.search);
+		var auxParam = urlParams.get('aux');
+		var adminParam = urlParams.get('admin');
+		
+		// Store the selected aux channel or admin mode
+		if (adminParam !== null) {
+			this.config.selectedAux = 'admin';
+		} else if (auxParam !== null) {
+			var auxNum = parseInt(auxParam);
+			if (auxNum >= 1 && auxNum <= 8) {
+				this.config.selectedAux = auxNum;
+			}
+		}
 	},
 	
 	/**
@@ -428,6 +542,25 @@ var remoteApp = {
 		for(tabid in app.config.controls) {
             if(app.config.controls.hasOwnProperty(tabid)) {
                 tab = app.config.controls[tabid];
+                
+                // Filter tabs based on selected aux channel
+                var shouldShowTab = true;
+                
+                if (app.config.selectedAux && app.config.selectedAux !== 'admin') {
+                    // Only show the selected aux channel tab
+                    if (tabid.indexOf('aux') === 0) {
+                        var tabAuxNum = parseInt(tabid.replace('aux', ''));
+                        shouldShowTab = (tabAuxNum === app.config.selectedAux);
+                    } else {
+                        // Hide other tabs (ch116, ch1732, master) when aux is selected
+                        shouldShowTab = false;
+                    }
+                }
+                
+                if (!shouldShowTab) {
+                    continue;
+                }
+                
                 tabIsActive = activeTabSelected ? (app.status.activeTab === tabid) : firstTab;
 
                 naviHtml += generateTab(tabid, tab.label, tab.title, tabIsActive);

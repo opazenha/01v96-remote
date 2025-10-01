@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+	<title>01v96 Remote - Select AUX Channel</title>
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" sizes="152x152"
+          href="img/touch/152.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120"
+          href="img/touch/120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76"
+          href="img/touch/76.png" />
+    <link rel="apple-touch-icon-precomposed"
+          href="img/touch/57.png" />
+
+    <meta name="msapplication-TileImage"
+          content="img/touch/256.png" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+
+	<style>
+		.channel-selection {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.channel-selection h1 {
+			color: #fff;
+			margin-bottom: 40px;
+			text-align: center;
+		}
+
+		.channel-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+			gap: 20px;
+			max-width: 800px;
+			width: 100%;
+		}
+
+		.channel-button {
+			background: linear-gradient(to bottom, #4a4a4a, #2a2a2a);
+			border: 2px solid #666;
+			border-radius: 8px;
+			color: #fff;
+			padding: 30px 20px;
+			font-size: 24px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100px;
+		}
+
+		.channel-button:hover {
+			background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+			border-color: #888;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		}
+
+		.channel-button:active {
+			transform: translateY(0);
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+		}
+	</style>
+</head>
+<body>
+
+<div class="channel-selection">
+	<h1>Select AUX Channel to Control</h1>
+	
+	<div class="channel-grid">
+		<a href="index.html?aux=1" class="channel-button">AUX 1</a>
+		<a href="index.html?aux=2" class="channel-button">AUX 2</a>
+		<a href="index.html?aux=3" class="channel-button">AUX 3</a>
+		<a href="index.html?aux=4" class="channel-button">AUX 4</a>
+		<a href="index.html?aux=5" class="channel-button">AUX 5</a>
+		<a href="index.html?aux=6" class="channel-button">AUX 6</a>
+		<a href="index.html?aux=7" class="channel-button">AUX 7</a>
+		<a href="index.html?aux=8" class="channel-button">AUX 8</a>
+	</div>
+</div>
+
+</body>
+</html>
