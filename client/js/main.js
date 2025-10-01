@@ -490,20 +490,8 @@ var remoteApp = {
 				}
 				
 				// generate HTML
-				return '<div class="control" data-id="' + id + '" data-target="' + target + '" data-number="' + num + '" data-number2="' + (num2 || '') + '">\
-					<div class="on-button">\
-						ON\
-					</div>\
-					<div class="group"></div>\
-					\
-					<div class="fader">\
-						<div class="fader-bar">\
-							<div class="fader-background"></div>\
-							<div class="fader-level" style="height:100%"></div>\
-						</div>\
-						\
-						<div class="fader-handle' + (target == 'sum' ? ' fader-handle-sum' : '') + '"></div>\
-					</div>\
+				return '<div class="control" data-target="' + target + '" data-num="' + num + '" data-num2="' + (num2 || 0) + '">\
+					<div class="on-button">ON</div>\
 					\
 					<div class="fader-biglabel">' +
 						bigLabel +
@@ -513,6 +501,16 @@ var remoteApp = {
 					\
 					<div class="fader-controls">\
 						<button class="fader-btn fader-btn-plus" data-action="increase">+</button>\
+						\
+						<div class="fader">\
+							<div class="fader-bar">\
+								<div class="fader-background"></div>\
+								<div class="fader-level" style="height:100%"></div>\
+							</div>\
+							\
+							<div class="fader-handle' + (target == 'sum' ? ' fader-handle-sum' : '') + '"></div>\
+						</div>\
+						\
 						<button class="fader-btn fader-btn-minus" data-action="decrease">-</button>\
 					</div>\
 				</div>';
