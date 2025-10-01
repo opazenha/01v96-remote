@@ -1,4 +1,4 @@
-﻿body, html {
+body, html {
 	height:100%;
 	padding:0;
 	margin:0;
@@ -19,6 +19,7 @@ body {
 
     /* native fast clicks on Metro IE */
     -ms-touch-action: none;
+    touch-action: none;
 }
 
 #wrapper {
@@ -195,9 +196,40 @@ body {
 
 .fader-label {
 	font-size:60%;
-	margin-bottom:1em;
+	margin-bottom:0.5em;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+.fader-controls {
+	display: flex;
+	justify-content: center;
+	gap: 5px;
+	margin-top: 5px;
+}
+
+.fader-btn {
+	width: 35px;
+	height: 35px;
+	padding: 0;
+	font-size: 18pt;
+	font-weight: bold;
+	cursor: pointer;
+	background-color: #116284;
+	border: 1px solid #fff;
+	color: #fff;
+	transition: all 0.2s;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.fader-btn:hover {
+	background-color: #1a7ba8;
+	transform: scale(1.05);
+}
+
+.fader-btn:active {
+	background-color: #0d4d68;
+	transform: scale(0.95);
 }
 
 .fader-settings {

@@ -510,6 +510,11 @@ var remoteApp = {
 					'</div>\
 					\
 					<div class="fader-label">&nbsp;</div>\
+					\
+					<div class="fader-controls">\
+						<button class="fader-btn fader-btn-plus" data-action="increase">+</button>\
+						<button class="fader-btn fader-btn-minus" data-action="decrease">-</button>\
+					</div>\
 				</div>';
 			},
 
@@ -663,6 +668,18 @@ var remoteApp = {
 			app.eventAbstraction.onButton(
 				$(this).parents('.control')
 			);
+		});
+		
+		// fader +/- buttons
+		$content.on('click', '.fader-btn', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			var $btn = $(this);
+			var $control = $btn.parents('.control');
+			var action = $btn.data('action');
+			
+			app.eventAbstraction.faderButton($control, action);
 		});
 		
 		// tab navigation
@@ -933,6 +950,55 @@ var remoteApp = {
 				target,
 				$control.data('number'),
 				newValue
+			);
+		},
+		
+		/**
+		 * click on fader +/- button
+		 * @param $control {jQuery} .control object
+		 * @param action {string} 'increase' or 'decrease'
+		 */
+		faderButton: function($control, action) {
+			var app = remoteApp,
+				id = $control.data('id'),
+				target = $control.data('target'),
+				num = $control.data('number'),
+				num2 = $control.data('number2'),
+				$handle = $control.find('.fader-handle'),
+				
+				currentValue = app.status.fader[id],
+				percentChange = 0.05, // 5% change
+				valueChange = Math.round(app.config.maxFaderValue * percentChange),
+				newValue;
+			
+			// Calculate new value
+			if (action === 'increase') {
+				newValue = currentValue + valueChange;
+			} else if (action === 'decrease') {
+				newValue = currentValue - valueChange;
+			}
+			
+			// Clamp value between 0 and max
+			if (newValue < 0) {
+				newValue = 0;
+			} else if (newValue > app.config.maxFaderValue) {
+				newValue = app.config.maxFaderValue;
+			}
+			
+			// Update status
+			app.status.fader[id] = newValue;
+			
+			// Update visual position
+			var newPositionPercent = (1 - newValue / app.config.maxFaderValue) * app.config.maxHandlePercent;
+			$handle.css('top', newPositionPercent + '%');
+			
+			// Send control message
+			app.sendControlMessage(
+				'fader',
+				target,
+				num,
+				newValue,
+				num2
 			);
 		}
 		
