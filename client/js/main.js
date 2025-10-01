@@ -490,22 +490,24 @@ var remoteApp = {
 				}
 				
 				// generate HTML
-				return '<div class="control" data-target="' + target + '" data-num="' + num + '" data-num2="' + (num2 || 0) + '">\
-					<div class="on-button">ON</div>\
+			return '<div class="control" data-id="' + id + '" data-target="' + target + '" data-number="' + num + '" data-number2="' + (num2 || 0) + '">\
+				<div class="on-button">ON</div>\
+				<div class="control-warning-badge" style="display:none;"></div>\
 					\
 					<div class="fader-biglabel">' +
-						bigLabel +
-					'</div>\
-					\
-					<div class="fader-label">&nbsp;</div>\
-					\
-					<div class="fader-controls">\
+					bigLabel +
+				'</div>\
+				\
+				<div class="fader-label">&nbsp;</div>\
+				\
+				<div class="fader-controls">\
 						<button class="fader-btn fader-btn-plus" data-action="increase">+</button>\
 						\
 						<div class="fader">\
 							<div class="fader-bar">\
 								<div class="fader-background"></div>\
 								<div class="fader-level" style="height:100%"></div>\
+								<div class="fader-level-warning"></div>\
 							</div>\
 							\
 							<div class="fader-handle' + (target == 'sum' ? ' fader-handle-sum' : '') + '"></div>\
@@ -1177,16 +1179,54 @@ var remoteApp = {
 		
 		// update displayed meter level
 		if(update.level) {
-			
+		
 			// show channel level on aux sends
 			if(target == 'auxsend') {
 				id = 'channel' + num;
 			}
 			
+			var currentLevel = app.status.level[id] || 0;
+			
 			levelPercent = (
-				1 - Math.pow(app.status.level[id], 2) / Math.pow(app.config.maxLevelValue,2)
+				1 - Math.pow(currentLevel, 2) / Math.pow(app.config.maxLevelValue,2)
 			) * 100;
 			$control.find('.fader-level').css('height', levelPercent + '%');
+			
+			// Update warning indicators based on level
+			// Level ranges: 0-24 (safe/green), 25-30 (warning/yellow), 31-32 (danger/red)
+			var $handle = $control.find('.fader-handle');
+			var $warning = $control.find('.fader-level-warning');
+			var $badge = $control.find('.control-warning-badge');
+			
+			// Remove all warning classes first
+			$handle.removeClass('handle-warning-yellow handle-warning-red');
+			$warning.removeClass('warning-yellow warning-red');
+			$badge.removeClass('badge-yellow badge-red').hide();
+			
+			if(currentLevel >= 31) {
+				// RED ZONE - Clipping/Distortion (above 0dB)
+				$handle.addClass('handle-warning-red');
+				$warning.addClass('warning-red');
+				$badge.addClass('badge-red').text('!').show();
+				
+				// Calculate warning height (show red in bottom portion)
+				var warningHeight = (1 - levelPercent / 100) * 100;
+				$warning.css('height', Math.min(warningHeight, 30) + '%');
+				
+			} else if(currentLevel >= 25) {
+				// YELLOW ZONE - Warning (approaching 0dB)
+				$handle.addClass('handle-warning-yellow');
+				$warning.addClass('warning-yellow');
+				$badge.addClass('badge-yellow').text('⚠').show();
+				
+				// Calculate warning height (show yellow in bottom portion)
+				var warningHeight = (1 - levelPercent / 100) * 100;
+				$warning.css('height', Math.min(warningHeight, 25) + '%');
+				
+			} else {
+				// GREEN ZONE - Safe levels
+				$warning.css('height', '0%');
+			}
 		}
 		
 	},
@@ -1195,7 +1235,6 @@ var remoteApp = {
      * refresh layout based on configuration
      * - fader names
      * - groups
-     * - configuration form
      */
     refreshConfiguration: function() {
         var app = remoteApp,
