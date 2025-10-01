@@ -109,9 +109,10 @@ body {
 #content {
 	flex: 1;
 	overflow-x: auto;
-	overflow-y: auto;
+	overflow-y: hidden;
 	padding: 1rem;
 	-webkit-overflow-scrolling: touch;
+	scroll-behavior: smooth;
 }
 
 .tabcontent {
@@ -119,6 +120,7 @@ body {
 	display:none;
 	text-align:center;
 	padding: 0.5rem;
+	white-space: nowrap;
 }
 
 .tabcontent-dynamic {
@@ -138,6 +140,26 @@ body {
 	position:relative;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	vertical-align: top;
+}
+
+/* Mobile: Optimize for horizontal scrolling */
+@media screen and (max-width:768px) {
+	#content {
+		overflow-y: hidden;
+		overflow-x: auto;
+		padding: 0.75rem 0.5rem;
+		scroll-snap-type: x proximity;
+	}
+	
+	.tabcontent {
+		white-space: nowrap;
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+	
+	.control {
+		scroll-snap-align: start;
+	}
 }
 
 .control:last-child {
