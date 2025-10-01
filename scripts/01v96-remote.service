@@ -1,0 +1,29 @@
+# 01v96 Remote - Systemd Service File for Linux
+# This file configures the server to start automatically on boot
+
+[Unit]
+Description=01v96 Remote MIDI Bridge Server
+After=network.target sound.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=zenha
+Group=zenha
+WorkingDirectory=/home/zenha/Documents/Projects/js/01v96-remote
+Environment="NODE_ENV=production"
+ExecStart=/usr/bin/node /home/zenha/Documents/Projects/js/01v96-remote/server.js midi
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/zenha/Documents/Projects/js/01v96-remote/logs/server.log
+StandardError=append:/home/zenha/Documents/Projects/js/01v96-remote/logs/server-error.log
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
