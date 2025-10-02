@@ -7,12 +7,12 @@ var transmitMessage = function(message) {
 };
 
 
-// send random fader values for channel 1
+// send random fader values for channel 1 (slowed for easier dev observation)
 setInterval(function() {
     transmitMessage([240,67,16,62,13,1,28,0,0,0,0,Math.round(Math.random()),Math.round(Math.random()*127),247]);
-}, 100);
+}, 500);
 
-// send random meter levels
+// send random meter levels (slower cadence to match fader updates)
 setInterval(function() {
 	var message = [240,67,16,62,13,33,0,0,0],
 		i;
@@ -24,7 +24,7 @@ setInterval(function() {
 	message.push(247);
 
     transmitMessage(message);
-}, 50);
+}, 250);
 
 
 
