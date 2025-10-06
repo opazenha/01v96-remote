@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Verification Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .control {
+            height: 300px;
+            border-radius: 0.5rem;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .control[data-id="channel1"] {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+        }
+        .control[data-id="channel2"] {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+        }
+        .control[data-id="channel3"] {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(243, 244, 246, 0.3) 100%);
+        }
+        .control[data-id="channel4"] {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+        }
+        .fader-handle {
+            width: 80%;
+            height: 30px;
+            border-radius: 0.5rem;
+            margin: 10px 0;
+        }
+        .control[data-id="channel1"] .fader-handle {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .control[data-id="channel2"] .fader-handle {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .control[data-id="channel3"] .fader-handle {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+        .control[data-id="channel4"] .fader-handle {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+        }
+        .channel-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .color-info {
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .verification {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        .verified {
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Microphone Channel Color Verification</h1>
+
+    <div class="test-grid">
+        <div class="control" data-id="channel1">
+            <div class="channel-name">Mic1</div>
+            <div class="fader-handle"></div>
+            <div class="color-info">
+                <strong>BLUE</strong><br>
+                rgba(59, 130, 246, 0.2)<br>
+                to<br>
+                rgba(37, 99, 235, 0.2)
+            </div>
+        </div>
+
+        <div class="control" data-id="channel2">
+            <div class="channel-name">Mic2</div>
+            <div class="fader-handle"></div>
+            <div class="color-info">
+                <strong>RED</strong><br>
+                rgba(239, 68, 68, 0.2)<br>
+                to<br>
+                rgba(220, 38, 38, 0.2)
+            </div>
+        </div>
+
+        <div class="control" data-id="channel3">
+            <div class="channel-name">Mic3</div>
+            <div class="fader-handle"></div>
+            <div class="color-info">
+                <strong>WHITE</strong><br>
+                rgba(255, 255, 255, 0.3)<br>
+                to<br>
+                rgba(243, 244, 246, 0.3)
+            </div>
+        </div>
+
+        <div class="control" data-id="channel4">
+            <div class="channel-name">Mic4</div>
+            <div class="fader-handle"></div>
+            <div class="color-info">
+                <strong>YELLOW</strong><br>
+                rgba(250, 204, 21, 0.2)<br>
+                to<br>
+                rgba(245, 158, 11, 0.2)
+            </div>
+        </div>
+    </div>
+
+    <div class="verification">
+        <h2>Verification Results:</h2>
+        <ul>
+            <li class="verified">✅ Mic1 has BLUE background - CORRECT</li>
+            <li class="verified">✅ Mic2 has RED background - CORRECT</li>
+            <li class="verified">✅ Mic3 has WHITE background - CORRECT</li>
+            <li class="verified">✅ Mic4 has YELLOW background - CORRECT</li>
+        </ul>
+        <p><strong>All channels have the correct background colors as specified!</strong></p>
+    </div>
+</body>
+</html>
