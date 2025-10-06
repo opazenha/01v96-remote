@@ -275,6 +275,49 @@ body {
   }
 }
 
+/* Mobile Landscape: Better space utilization */
+@media screen and (max-width: 768px) and (orientation: landscape) and (hover: none) {
+  #wrapper {
+    min-height: 100vh;
+  }
+
+  #top {
+    padding: 0.5rem 1rem;
+  }
+
+  #headline {
+    font-size: 1.1rem;
+    line-height: 2rem;
+  }
+
+  #content {
+    padding: 0.5rem;
+  }
+
+  .control {
+    width: 110px;
+    min-width: 100px;
+    margin: 0 0.3rem;
+  }
+
+  .fader {
+    height: 240px;
+    min-height: 200px;
+  }
+
+  .fader-btn {
+    height: 48px;
+    min-height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .on-button {
+    margin: 0 auto 0.5rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+}
+
 .control:last-child {
   margin-right: 0.5rem;
 }

@@ -11,6 +11,8 @@ var remoteApp = {
    * application-wide configuration
    */
   config: {
+    // Detect if running on mobile device
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !/Electron/i.test(navigator.userAgent),
     // WebSocket server location
     socketHost: window.location.hostname,
     socketPort: 1338,
@@ -357,6 +359,9 @@ var remoteApp = {
   init: function () {
     var app = this;
 
+    // Enforce landscape orientation on mobile devices
+    app.enforceLandscapeOrientation();
+
     // Parse URL parameters
     app.parseUrlParameters();
 
@@ -370,6 +375,96 @@ var remoteApp = {
 
       app.start();
     });
+  },
+
+  /**
+   * Enforces landscape orientation on mobile devices
+   */
+  enforceLandscapeOrientation: function () {
+    var app = this;
+
+    // Only enforce on mobile devices, not on desktop or Electron
+    if (!app.config.isMobile) {
+      return;
+    }
+
+    // Function to check orientation and show warning if in portrait
+    function checkOrientation() {
+      var isPortrait = window.innerHeight > window.innerWidth;
+
+      if (isPortrait) {
+        // Show orientation warning overlay
+        app.showOrientationWarning();
+      } else {
+        // Hide orientation warning overlay
+        app.hideOrientationWarning();
+      }
+    }
+
+    // Check orientation on load
+    checkOrientation();
+
+    // Check orientation on resize/rotation
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', function() {
+      // Small delay to allow the browser to update dimensions
+      setTimeout(checkOrientation, 100);
+    });
+  },
+
+  /**
+   * Shows orientation warning overlay
+   */
+  showOrientationWarning: function () {
+    // Remove existing warning if present
+    $('#orientation-warning').remove();
+
+    // Create warning overlay
+    var warningHtml =
+      '<div id="orientation-warning" style="' +
+        'position: fixed;' +
+        'top: 0;' +
+        'left: 0;' +
+        'width: 100%;' +
+        'height: 100%;' +
+        'background: rgba(0, 0, 0, 0.95);' +
+        'color: white;' +
+        'display: flex;' +
+        'flex-direction: column;' +
+        'align-items: center;' +
+        'justify-content: center;' +
+        'z-index: 9999;' +
+        'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
+        'text-align: center;' +
+        'padding: 2rem;' +
+      '">' +
+        '<div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>' +
+        '<h2 style="font-size: 1.5rem; font-weight: 600; margin: 0 0 1rem 0; color: #60a5fa;">' +
+          'Please rotate your device' +
+        '</h2>' +
+        '<p style="font-size: 1rem; margin: 0; line-height: 1.5; color: rgba(255, 255, 255, 0.8);">' +
+          'This app works best in landscape mode.<br>' +
+          'Rotate your phone to continue.' +
+        '</p>' +
+        '<div style="margin-top: 2rem; font-size: 2rem; animation: rotate 2s ease-in-out infinite;">' +
+          '↻' +
+        '</div>' +
+      '</div>' +
+      '<style>' +
+        '@keyframes rotate {' +
+          '0% { transform: rotate(0deg); }' +
+          '100% { transform: rotate(-90deg); }' +
+        '}' +
+      '</style>';
+
+    $('body').append(warningHtml);
+  },
+
+  /**
+   * Hides orientation warning overlay
+   */
+  hideOrientationWarning: function () {
+    $('#orientation-warning').remove();
   },
 
   /**

@@ -1,9 +1,4 @@
-Change the background colors of and names on the landing page menu.
-
-1- Mic1 (blue)
-2- Mic2 (red)
-3- Mic3 (white) > careful with the font color here
-4- Mic4 (yellow)
-...
-
-Lets start with these changes. Then we do the others.
+Lets work on the page layout once on the mixer view. I have setup to have it verticaly and to scroll sideways.
+I thought a little better on the user experience and decided that the page should be loaded in landscape mode. The phones should be sideways to better screen usage.
+If the app is running on desktop or on Electron it should always be as it currently is.
+Lets do this!
