@@ -275,47 +275,124 @@ body {
   }
 }
 
-/* Mobile Landscape: Better space utilization */
+/* Mobile Portrait Mode - User Choice */
+body.portrait-mode {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+body.portrait-mode #content {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scroll-snap-type: x proximity;
+}
+
+body.portrait-mode .tabcontent {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+body.portrait-mode .control {
+  scroll-snap-align: start;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Mobile Landscape Mode - User Choice */
+body.landscape-mode {
+  /* Better landscape layout when user chooses landscape */
+}
+
+body.landscape-mode #content {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem;
+}
+
+body.landscape-mode .control {
+  width: 110px;
+  min-width: 100px;
+  margin: 0 0.3rem;
+}
+
+body.landscape-mode .fader {
+  height: 240px;
+  min-height: 200px;
+}
+
+body.landscape-mode .fader-btn {
+  height: 48px;
+  min-height: 48px;
+  font-size: 1.5rem;
+}
+
+body.landscape-mode .on-button {
+  margin: 0 auto 0.5rem;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.8rem;
+}
+
+/* Mobile Landscape: Better space utilization (auto-detected) */
 @media screen and (max-width: 768px) and (orientation: landscape) and (hover: none) {
-  #wrapper {
+  body:not(.portrait-mode) {
+    /* Apply landscape optimizations when in landscape and not in portrait mode */
+  }
+
+  body:not(.portrait-mode) #wrapper {
     min-height: 100vh;
   }
 
-  #top {
+  body:not(.portrait-mode) #top {
     padding: 0.5rem 1rem;
   }
 
-  #headline {
+  body:not(.portrait-mode) #headline {
     font-size: 1.1rem;
     line-height: 2rem;
   }
 
-  #content {
+  body:not(.portrait-mode) #content {
     padding: 0.5rem;
   }
 
-  .control {
+  body:not(.portrait-mode) .control {
     width: 110px;
     min-width: 100px;
     margin: 0 0.3rem;
   }
 
-  .fader {
+  body:not(.portrait-mode) .fader {
     height: 240px;
     min-height: 200px;
   }
 
-  .fader-btn {
+  body:not(.portrait-mode) .fader-btn {
     height: 48px;
     min-height: 48px;
     font-size: 1.5rem;
   }
 
-  .on-button {
+  body:not(.portrait-mode) .on-button {
     margin: 0 auto 0.5rem;
     padding: 0.5rem 0.25rem;
     font-size: 0.8rem;
   }
+}
+
+/* Orientation selection overlay styles */
+#orientation-selection button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+#orientation-selection #landscape-btn:hover {
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.5);
+}
+
+#orientation-selection button:active {
+  transform: translateY(0);
 }
 
 .control:last-child {

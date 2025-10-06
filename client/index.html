@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <title>01v96 Remote</title>
+    <title>01v96 Controlo Remoto</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json" />
@@ -72,10 +72,10 @@
   <body>
     <div id="wrapper">
       <div id="top">
-        <div id="headline">01v96 Remote</div>
+        <div id="headline">01v96 Controlo Remoto</div>
 
         <ul id="navi" class="hidden">
-          <li data-tab="configuration" title="Configuration">
+          <li data-tab="configuration" title="Configuração">
             <i class="icon-cog"></i>
           </li>
         </ul>
@@ -88,37 +88,37 @@
           id="configuration"
         >
           <div id="configuration_loading" class="center">
-            <p>Loading configuration...</p>
+            <p>A carregar configuração...</p>
             <div class="loading-animation"></div>
           </div>
 
           <div id="configuration_content">
             <div class="grid-3">
               <div>
-                <h2>Channel names</h2>
+                <h2>Nomes dos canais</h2>
 
                 <div id="configuration_channels"></div>
               </div>
               <div>
-                <h2>Master names</h2>
+                <h2>Nomes do master</h2>
 
                 <div id="configuration_master"></div>
               </div>
               <div>
-                <h2>Pairs / Groups</h2>
+                <h2>Pares / Grupos</h2>
 
                 <textarea id="configuration_groups"></textarea>
 
                 <p class="small">
-                  One line per group
+                  Uma linha por grupo
                   <br />
-                  channel numbers separated with commas
+                  números dos canais separados por vírgulas
                 </p>
               </div>
             </div>
 
             <div class="center">
-              <button id="configuration_save">Save configuration</button>
+              <button id="configuration_save">Guardar configuração</button>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@
         <div id="loading-dialog" class="dialog">
           <div class="dialog-content dialog-center">
             <div class="dialog-spacer"></div>
-            <p id="loading-dialog-text">Initializing 01v96 Remote...</p>
+            <p id="loading-dialog-text">A inicializar 01v96 Controlo Remoto...</p>
             <div class="loading-animation"></div>
           </div>
         </div>
@@ -135,17 +135,17 @@
           <div class="dialog-content dialog-center">
             <p class="dialog-headline">
               <i class="icon-warning-sign"></i>
-              ERROR
+              ERRO
 
               <span class="dialog-subheadline">
-                (This isn't even remotely funny!)
+                (Isto nem sequer é remotamente engraçado!)
               </span>
             </p>
-            <p id="error-dialog-text">Error message</p>
+            <p id="error-dialog-text">Mensagem de erro</p>
             <p
               id="error-dialog-reload"
               onclick="window.location.reload()"
-              title="reload page"
+              title="recarregar página"
             >
               <i class="icon-refresh"></i>
             </p>

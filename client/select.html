@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="mobile-web-app-capable" content="yes" />
 
-	<title>01v96 Remote - Select AUX Channel</title>
+	<title>01v96 Remote - Selecionar Canal AUX</title>
 
     <link rel="shortcut icon" href="img/favicon.ico">
 
@@ -218,25 +218,64 @@
 			}
 		}
 
-		/* Mobile Landscape: Better space utilization */
+		/* Mobile Portrait Mode - User Choice */
+		body.portrait-mode .channel-selection {
+			padding: 1rem;
+		}
+
+		body.portrait-mode .channel-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1rem;
+		}
+
+		body.portrait-mode .channel-button {
+			padding: 1.25rem 1rem;
+			font-size: 1.2rem;
+			min-height: 90px;
+		}
+
+		/* Mobile Landscape Mode - User Choice */
+		body.landscape-mode .channel-selection {
+			padding: 1rem;
+			min-height: 100vh;
+		}
+
+		body.landscape-mode .channel-selection h1 {
+			font-size: 1.3rem;
+			margin-bottom: 1rem;
+		}
+
+		body.landscape-mode .channel-grid {
+			grid-template-columns: repeat(4, 1fr);
+			gap: 0.75rem;
+			max-width: 100%;
+		}
+
+		body.landscape-mode .channel-button {
+			padding: 1rem 0.5rem;
+			font-size: 1.1rem;
+			min-height: 70px;
+		}
+
+		/* Mobile Landscape: Better space utilization (auto-detected) */
 		@media screen and (max-width: 768px) and (orientation: landscape) and (hover: none) {
-			.channel-selection {
+			body:not(.portrait-mode) .channel-selection {
 				padding: 1rem;
 				min-height: 100vh;
 			}
 
-			.channel-selection h1 {
+			body:not(.portrait-mode) .channel-selection h1 {
 				font-size: 1.3rem;
 				margin-bottom: 1rem;
 			}
 
-			.channel-grid {
+			body:not(.portrait-mode) .channel-grid {
 				grid-template-columns: repeat(4, 1fr);
 				gap: 0.75rem;
 				max-width: 100%;
 			}
 
-			.channel-button {
+			body:not(.portrait-mode) .channel-button {
 				padding: 1rem 0.5rem;
 				font-size: 1.1rem;
 				min-height: 70px;
@@ -272,7 +311,7 @@
 <body>
 
 <div class="channel-selection">
-	<h1>Select AUX Channel to Control</h1>
+	<h1>Selecionar Canal AUX para Controlar</h1>
 	
 	<div class="channel-grid">
 		<a href="index.html?aux=1" class="channel-button mic1"><i class="icon-microphone"></i> &nbsp;Mic1&nbsp; <i class="icon-microphone"></i></a>
@@ -290,55 +329,35 @@
 // Detect if running on mobile device
 var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && !/Electron/i.test(navigator.userAgent);
 
-// Enforce landscape orientation on mobile devices
-function enforceLandscapeOrientation() {
-    // Only enforce on mobile devices, not on desktop or Electron
+// Shows orientation selection for mobile devices
+function showOrientationSelection() {
+    // Only show on mobile devices, not on desktop or Electron
     if (!isMobile) {
         return;
     }
 
-    // Function to check orientation and show warning if in portrait
-    function checkOrientation() {
-        var isPortrait = window.innerHeight > window.innerWidth;
-
-        if (isPortrait) {
-            // Show orientation warning overlay
-            showOrientationWarning();
+    // Check if user has already made a choice
+    var orientationChoice = localStorage.getItem('orientationChoice');
+    if (orientationChoice) {
+        // Apply the saved choice
+        if (orientationChoice === 'landscape') {
+            document.body.classList.add('landscape-mode');
         } else {
-            // Hide orientation warning overlay
-            hideOrientationWarning();
+            document.body.classList.add('portrait-mode');
         }
+        return;
     }
 
-    // Check orientation on load
-    checkOrientation();
-
-    // Check orientation on resize/rotation
-    window.addEventListener('resize', checkOrientation);
-    window.addEventListener('orientationchange', function() {
-        // Small delay to allow the browser to update dimensions
-        setTimeout(checkOrientation, 100);
-    });
-}
-
-// Shows orientation warning overlay
-function showOrientationWarning() {
-    // Remove existing warning if present
-    var existingWarning = document.getElementById('orientation-warning');
-    if (existingWarning) {
-        existingWarning.remove();
-    }
-
-    // Create warning overlay
-    var warningDiv = document.createElement('div');
-    warningDiv.id = 'orientation-warning';
-    warningDiv.style.cssText =
+    // Create orientation selection overlay
+    var selectionDiv = document.createElement('div');
+    selectionDiv.id = 'orientation-selection';
+    selectionDiv.style.cssText =
         'position: fixed;' +
         'top: 0;' +
         'left: 0;' +
         'width: 100%;' +
         'height: 100%;' +
-        'background: rgba(0, 0, 0, 0.95);' +
+        'background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);' +
         'color: white;' +
         'display: flex;' +
         'flex-direction: column;' +
@@ -347,40 +366,112 @@ function showOrientationWarning() {
         'z-index: 9999;' +
         'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
         'text-align: center;' +
-        'padding: 2rem;';
+        'padding: 2rem;' +
+        '-webkit-backdrop-filter: blur(10px);' +
+        'backdrop-filter: blur(10px);';
 
-    warningDiv.innerHTML =
-        '<div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>' +
+    selectionDiv.innerHTML =
+        '<div style="font-size: 2.5rem; margin-bottom: 1rem;">📱</div>' +
         '<h2 style="font-size: 1.5rem; font-weight: 600; margin: 0 0 1rem 0; color: #60a5fa;">' +
-            'Please rotate your device' +
+            'Escolha a sua orientação preferida' +
         '</h2>' +
-        '<p style="font-size: 1rem; margin: 0; line-height: 1.5; color: rgba(255, 255, 255, 0.8);">' +
-            'This app works best in landscape mode.<br>' +
-            'Rotate your phone to continue.' +
+        '<p style="font-size: 1rem; margin: 0 0 2rem 0; line-height: 1.5; color: rgba(255, 255, 255, 0.8);' +
+           'max-width: 300px;">' +
+            'Selecione como gostaria de usar a mesa de mistura. Pode alterar isto mais tarde nas definições.' +
         '</p>' +
-        '<div style="margin-top: 2rem; font-size: 2rem; animation: rotate 2s ease-in-out infinite;">' +
-            '↻' +
+
+        '<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">' +
+            '<button id="portrait-btn" style="' +
+                'background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.8) 100%);' +
+                'border: 2px solid rgba(59, 130, 246, 0.9);' +
+                'color: white;' +
+                'padding: 1rem 2rem;' +
+                'border-radius: 1rem;' +
+                'font-size: 1rem;' +
+                'font-weight: 600;' +
+                'cursor: pointer;' +
+                'transition: all 0.3s ease;' +
+                'box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);' +
+                'display: flex;' +
+                'flex-direction: column;' +
+                'align-items: center;' +
+                'gap: 0.5rem;' +
+                'min-width: 120px;' +
+            '">' +
+                '<div style="font-size: 2rem;">📱</div>' +
+                '<div>Retrato</div>' +
+                '<div style="font-size: 0.8rem; opacity: 0.8;">Rolamento vertical</div>' +
+            '</button>' +
+
+            '<button id="landscape-btn" style="' +
+                'background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(16, 185, 129, 0.8) 100%);' +
+                'border: 2px solid rgba(34, 197, 94, 0.9);' +
+                'color: white;' +
+                'padding: 1rem 2rem;' +
+                'border-radius: 1rem;' +
+                'font-size: 1rem;' +
+                'font-weight: 600;' +
+                'cursor: pointer;' +
+                'transition: all 0.3s ease;' +
+                'box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);' +
+                'display: flex;' +
+                'flex-direction: column;' +
+                'align-items: center;' +
+                'gap: 0.5rem;' +
+                'min-width: 120px;' +
+            '">' +
+                '<div style="font-size: 2rem; transform: rotate(90deg);">📱</div>' +
+                '<div>Paisagem</div>' +
+                '<div style="font-size: 0.8rem; opacity: 0.8;">Rolamento horizontal</div>' +
+            '</button>' +
+        '</div>' +
+
+        '<div style="margin-top: 2rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);">' +
+            '💡 Dica: O modo paisagem proporciona uma melhor experiência de controlo da mesa de mistura' +
         '</div>' +
         '<style>' +
-        '@keyframes rotate {' +
-            '0% { transform: rotate(0deg); }' +
-            '100% { transform: rotate(-90deg); }' +
-        '}' +
+        '#orientation-selection button:hover { transform: translateY(-2px); }' +
+        '#orientation-selection #landscape-btn:hover { box-shadow: 0 6px 16px rgba(34, 197, 94, 0.5); }' +
+        '#orientation-selection #portrait-btn:hover { box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5); }' +
+        '#orientation-selection button:active { transform: translateY(0); }' +
         '</style>';
 
-    document.body.appendChild(warningDiv);
+    document.body.appendChild(selectionDiv);
+
+    // Bind click handlers
+    document.getElementById('portrait-btn').addEventListener('click', function() {
+        setOrientationMode('portrait');
+    });
+
+    document.getElementById('landscape-btn').addEventListener('click', function() {
+        setOrientationMode('landscape');
+    });
 }
 
-// Hides orientation warning overlay
-function hideOrientationWarning() {
-    var warning = document.getElementById('orientation-warning');
-    if (warning) {
-        warning.remove();
+// Sets the orientation mode and applies appropriate styles
+function setOrientationMode(mode) {
+    // Save user's choice
+    localStorage.setItem('orientationChoice', mode);
+
+    // Remove selection overlay with fade out
+    var selection = document.getElementById('orientation-selection');
+    selection.style.opacity = '0';
+    selection.style.transition = 'opacity 0.3s ease';
+
+    setTimeout(function() {
+        selection.remove();
+    }, 300);
+
+    // Apply orientation-specific styles
+    if (mode === 'landscape') {
+        document.body.classList.add('landscape-mode');
+    } else {
+        document.body.classList.add('portrait-mode');
     }
 }
 
-// Initialize landscape orientation enforcement on page load
-document.addEventListener('DOMContentLoaded', enforceLandscapeOrientation);
+// Initialize orientation selection on page load
+document.addEventListener('DOMContentLoaded', showOrientationSelection);
 </script>
 
 </body>

@@ -359,8 +359,11 @@ var remoteApp = {
   init: function () {
     var app = this;
 
-    // Enforce landscape orientation on mobile devices
-    app.enforceLandscapeOrientation();
+    // Apply saved orientation preference
+    app.applySavedOrientation();
+
+    // Show orientation selection for mobile devices
+    app.showOrientationSelection();
 
     // Parse URL parameters
     app.parseUrlParameters();
@@ -378,56 +381,54 @@ var remoteApp = {
   },
 
   /**
-   * Enforces landscape orientation on mobile devices
+   * Applies saved orientation preference
    */
-  enforceLandscapeOrientation: function () {
+  applySavedOrientation: function () {
     var app = this;
 
-    // Only enforce on mobile devices, not on desktop or Electron
+    // Only apply on mobile devices
     if (!app.config.isMobile) {
       return;
     }
 
-    // Function to check orientation and show warning if in portrait
-    function checkOrientation() {
-      var isPortrait = window.innerHeight > window.innerWidth;
-
-      if (isPortrait) {
-        // Show orientation warning overlay
-        app.showOrientationWarning();
+    // Check if user has already made a choice
+    var orientationChoice = localStorage.getItem('orientationChoice');
+    if (orientationChoice) {
+      // Apply the saved choice
+      if (orientationChoice === 'landscape') {
+        $('body').addClass('landscape-mode');
       } else {
-        // Hide orientation warning overlay
-        app.hideOrientationWarning();
+        $('body').addClass('portrait-mode');
       }
     }
-
-    // Check orientation on load
-    checkOrientation();
-
-    // Check orientation on resize/rotation
-    window.addEventListener('resize', checkOrientation);
-    window.addEventListener('orientationchange', function() {
-      // Small delay to allow the browser to update dimensions
-      setTimeout(checkOrientation, 100);
-    });
   },
 
   /**
-   * Shows orientation warning overlay
+   * Shows orientation selection for mobile devices
    */
-  showOrientationWarning: function () {
-    // Remove existing warning if present
-    $('#orientation-warning').remove();
+  showOrientationSelection: function () {
+    var app = this;
 
-    // Create warning overlay
-    var warningHtml =
-      '<div id="orientation-warning" style="' +
+    // Only show on mobile devices, not on desktop or Electron
+    if (!app.config.isMobile) {
+      return;
+    }
+
+    // Check if user has already made a choice
+    var orientationChoice = localStorage.getItem('orientationChoice');
+    if (orientationChoice) {
+      return; // User has already made a choice
+    }
+
+    // Create orientation selection overlay
+    var selectionHtml =
+      '<div id="orientation-selection" style="' +
         'position: fixed;' +
         'top: 0;' +
         'left: 0;' +
         'width: 100%;' +
         'height: 100%;' +
-        'background: rgba(0, 0, 0, 0.95);' +
+        'background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);' +
         'color: white;' +
         'display: flex;' +
         'flex-direction: column;' +
@@ -437,34 +438,106 @@ var remoteApp = {
         'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;' +
         'text-align: center;' +
         'padding: 2rem;' +
+        '-webkit-backdrop-filter: blur(10px);' +
+        'backdrop-filter: blur(10px);' +
       '">' +
-        '<div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>' +
+        '<div style="font-size: 2.5rem; margin-bottom: 1rem;">📱</div>' +
         '<h2 style="font-size: 1.5rem; font-weight: 600; margin: 0 0 1rem 0; color: #60a5fa;">' +
-          'Please rotate your device' +
+          'Escolha a sua orientação preferida' +
         '</h2>' +
-        '<p style="font-size: 1rem; margin: 0; line-height: 1.5; color: rgba(255, 255, 255, 0.8);">' +
-          'This app works best in landscape mode.<br>' +
-          'Rotate your phone to continue.' +
+        '<p style="font-size: 1rem; margin: 0 0 2rem 0; line-height: 1.5; color: rgba(255, 255, 255, 0.8);' +
+           'max-width: 300px;">' +
+          'Selecione como gostaria de usar a mesa de mistura. Pode alterar isto mais tarde nas definições.' +
         '</p>' +
-        '<div style="margin-top: 2rem; font-size: 2rem; animation: rotate 2s ease-in-out infinite;">' +
-          '↻' +
-        '</div>' +
-      '</div>' +
-      '<style>' +
-        '@keyframes rotate {' +
-          '0% { transform: rotate(0deg); }' +
-          '100% { transform: rotate(-90deg); }' +
-        '}' +
-      '</style>';
 
-    $('body').append(warningHtml);
+        '<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">' +
+          '<button id="portrait-btn" style="' +
+            'background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.8) 100%);' +
+            'border: 2px solid rgba(59, 130, 246, 0.9);' +
+            'color: white;' +
+            'padding: 1rem 2rem;' +
+            'border-radius: 1rem;' +
+            'font-size: 1rem;' +
+            'font-weight: 600;' +
+            'cursor: pointer;' +
+            'transition: all 0.3s ease;' +
+            'box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);' +
+            'display: flex;' +
+            'flex-direction: column;' +
+            'align-items: center;' +
+            'gap: 0.5rem;' +
+            'min-width: 120px;' +
+          '">' +
+            '<div style="font-size: 2rem;">📱</div>' +
+            '<div>Retrato</div>' +
+            '<div style="font-size: 0.8rem; opacity: 0.8;">Rolamento vertical</div>' +
+          '</button>' +
+
+          '<button id="landscape-btn" style="' +
+            'background: linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(16, 185, 129, 0.8) 100%);' +
+            'border: 2px solid rgba(34, 197, 94, 0.9);' +
+            'color: white;' +
+            'padding: 1rem 2rem;' +
+            'border-radius: 1rem;' +
+            'font-size: 1rem;' +
+            'font-weight: 600;' +
+            'cursor: pointer;' +
+            'transition: all 0.3s ease;' +
+            'box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);' +
+            'display: flex;' +
+            'flex-direction: column;' +
+            'align-items: center;' +
+            'gap: 0.5rem;' +
+            'min-width: 120px;' +
+          '">' +
+            '<div style="font-size: 2rem; transform: rotate(90deg);">📱</div>' +
+            '<div>Paisagem</div>' +
+            '<div style="font-size: 0.8rem; opacity: 0.8;">Rolamento horizontal</div>' +
+          '</button>' +
+        '</div>' +
+
+        '<div style="margin-top: 2rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);">' +
+          '💡 Dica: O modo paisagem proporciona uma melhor experiência de controlo da mesa de mistura' +
+        '</div>' +
+      '</div>';
+
+    $('body').append(selectionHtml);
+
+    // Bind click handlers
+    $('#portrait-btn').on('click', function() {
+      app.setOrientationMode('portrait');
+    });
+
+    $('#landscape-btn').on('click', function() {
+      app.setOrientationMode('landscape');
+    });
   },
 
   /**
-   * Hides orientation warning overlay
+   * Sets the orientation mode and applies appropriate styles
    */
-  hideOrientationWarning: function () {
-    $('#orientation-warning').remove();
+  setOrientationMode: function(mode) {
+    var app = this;
+
+    // Save user's choice
+    localStorage.setItem('orientationChoice', mode);
+
+    // Remove selection overlay
+    $('#orientation-selection').fadeOut(300, function() {
+      $(this).remove();
+    });
+
+    // Apply orientation-specific styles
+    if (mode === 'landscape') {
+      $('body').addClass('landscape-mode');
+    } else {
+      $('body').addClass('portrait-mode');
+    }
+
+    // Refresh fader heights after orientation change
+    setTimeout(function() {
+      app.refreshFaderHeight();
+    }, 350);
   },
 
   /**
@@ -499,7 +572,7 @@ var remoteApp = {
     }
 
     // sync with mixer
-    $("#loading-dialog-text").html("Syncing with the mixing console...");
+    $("#loading-dialog-text").html("A sincronizar com a mesa de mistura...");
 
     this.sendMessage({
       type: "sync",
@@ -525,7 +598,7 @@ var remoteApp = {
     if (!window.WebSocket) {
       $(document).ready(function () {
         app.displayError(
-          "Your browser does not support WebSockets!<br />Please use a modern browser like Mozilla Firefox or Google Chrome."
+          "O seu navegador não suporta WebSockets!<br />Por favor, use um navegador moderno como o Mozilla Firefox ou o Google Chrome."
         );
       });
 
@@ -542,11 +615,11 @@ var remoteApp = {
 
     app.connection.onerror = function (error) {
       console.log("WebSocket error", error);
-      app.displayError("A WebSocket error occured!", true);
+      app.displayError("Ocorreu um erro de WebSocket!", true);
     };
 
     app.connection.onclose = function () {
-      app.displayError("The connection to the server has been lost!", true);
+      app.displayError("A ligação ao servidor foi perdida!", true);
       window.setTimeout(function () {
         app.openSocketConnection();
       }, 1000);
@@ -1535,10 +1608,10 @@ var remoteApp = {
       config: newConfig,
     });
 
-    $("#configuration_save").html("Configuration saved.");
+    $("#configuration_save").html("Configuração guardada.");
 
     window.setTimeout(function () {
-      $("#configuration_save").html("Save configuration");
+      $("#configuration_save").html("Guardar configuração");
     }, 5000);
   },
 
