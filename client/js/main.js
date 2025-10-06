@@ -96,7 +96,7 @@ var remoteApp = {
       },
 
       aux1: {
-        label: "AUX 1",
+        label: "Mic1",
         faders: [
           ["auxsend", 1, "1", 1],
           ["auxsend", 2, "2", 1],
@@ -119,7 +119,7 @@ var remoteApp = {
       },
 
       aux2: {
-        label: "AUX 2",
+        label: "Mic2",
         faders: [
           ["auxsend", 1, "1", 2],
           ["auxsend", 2, "2", 2],
@@ -142,7 +142,7 @@ var remoteApp = {
       },
 
       aux3: {
-        label: "AUX 3",
+        label: "Mic3",
         faders: [
           ["auxsend", 1, "1", 3],
           ["auxsend", 2, "2", 3],
@@ -165,7 +165,7 @@ var remoteApp = {
       },
 
       aux4: {
-        label: "AUX 4",
+        label: "Mic4",
         faders: [
           ["auxsend", 1, "1", 4],
           ["auxsend", 2, "2", 4],
@@ -211,7 +211,7 @@ var remoteApp = {
       },
 
       aux6: {
-        label: "AUX 6",
+        label: "VIOLA",
         faders: [
           ["auxsend", 1, "1", 6],
           ["auxsend", 2, "2", 6],
@@ -257,7 +257,7 @@ var remoteApp = {
       },
 
       aux8: {
-        label: "AUX 8",
+        label: "RETORNO",
         faders: [
           ["auxsend", 1, "1", 8],
           ["auxsend", 2, "2", 8],

@@ -1,1 +1,2 @@
-Go over the code and make sure that ALL the UI text is in PT-PT. Currently it is in English.
+When on the mixer page, the top left indicator still shows the old names (aux1, aux2, etc.)
+Lets update them to the new names.
