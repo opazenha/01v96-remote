@@ -71,7 +71,7 @@ var remoteApp = {
       },
 
       ch1732: {
-        label: "CH 17-32",
+        label: "LIVE",
         faders: [
           ["channel", 17, "17"],
           ["channel", 18, "18"],
