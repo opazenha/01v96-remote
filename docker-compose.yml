@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  01v96-remote:
+    build: .
+    container_name: 01v96-remote
+    ports:
+      - "1337:1337"  # Web interface
+      - "1338:1338"  # WebSocket
+    volumes:
+      # Mount config directory for persistent configuration
+      - ./config:/app/config
+      # Mount MIDI device if using USB MIDI on Linux
+      # Uncomment the line below and adjust path as needed
+      # - /dev/snd:/dev/snd
+      # Mount serial port if using serial connection on Raspberry Pi
+      # Uncomment the line below for Raspberry Pi serial access
+      # - /dev/ttyAMA0:/dev/ttyAMA0
+    environment:
+      - NODE_ENV=production
+      # You can specify the connection type here
+      # - MIXER_TYPE=midi  # Options: midi, serialport, dummy
+    devices:
+      # Grant access to MIDI devices on Linux
+      # Uncomment for USB MIDI access
+      # - /dev/snd:/dev/snd
+      # Grant access to serial port on Raspberry Pi
+      # Uncomment for serial port access
+      # - /dev/ttyAMA0:/dev/ttyAMA0
+    privileged: false
+    # Add capabilities for MIDI/serial access if needed
+    cap_add:
+      - SYS_RAWIO  # For raw device access
+    restart: unless-stopped
+    # Health check to ensure the service is running
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:1337"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a reverse proxy for HTTPS/SSL termination
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: 01v96-nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - 01v96-remote
+  #   restart: unless-stopped
