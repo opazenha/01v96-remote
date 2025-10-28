@@ -8,7 +8,7 @@ RUN apk add --no-cache \
     linux-headers \
     udev \
     alsa-lib-dev \
-    libasound2-dev
+    alsa-utils
 
 # Set working directory
 WORKDIR /app

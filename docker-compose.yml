@@ -20,13 +20,13 @@ services:
       - NODE_ENV=production
       # You can specify the connection type here
       # - MIXER_TYPE=midi  # Options: midi, serialport, dummy
-    devices:
-      # Grant access to MIDI devices on Linux
-      # Uncomment for USB MIDI access
-      # - /dev/snd:/dev/snd
-      # Grant access to serial port on Raspberry Pi
-      # Uncomment for serial port access
-      # - /dev/ttyAMA0:/dev/ttyAMA0
+    # devices:
+    #   # Grant access to MIDI devices on Linux
+    #   # Uncomment for USB MIDI access
+    #   - "/dev/snd:/dev/snd"
+    #   # Grant access to serial port on Raspberry Pi
+    #   # Uncomment for serial port access
+    #   - "/dev/ttyAMA0:/dev/ttyAMA0"
     privileged: false
     # Add capabilities for MIDI/serial access if needed
     cap_add:
